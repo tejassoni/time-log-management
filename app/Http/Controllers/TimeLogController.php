@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class TimeLogController extends Controller
 {
+    private $timeLogService;
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index(Request $request)
     {
         // Handle the request to display time logs
