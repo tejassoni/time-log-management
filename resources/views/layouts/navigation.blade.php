@@ -16,6 +16,12 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                <!-- Time Logs Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('time-logs.index')" :active="request()->routeIs('time-logs.index')">
+                        {{ __('Time Logs') }}
+                    </x-nav-link> 
+                </div>  
             </div>
 
             <!-- Settings Dropdown -->
