@@ -27,6 +27,13 @@
                 </header>
             @endisset
 
+            <!-- Flash messages -->
+            @if (session('success') || session('status') || session('error') || $errors->any())
+                <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 pt-6">
+                    <x-flash />
+                </div>
+            @endif
+
             <!-- Page Content -->
             <main>
                 {{ $slot }}

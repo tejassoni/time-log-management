@@ -4,12 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-use App\ValueObjects\Duration;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
-
-
 class TimeLog extends Model
 {
     protected $fillable = [

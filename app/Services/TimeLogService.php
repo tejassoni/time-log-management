@@ -11,44 +11,50 @@ use Illuminate\Validation\ValidationException;
 
 class TimeLogService
 {
-    public function __construct(
-        private readonly TimeLogRepository $timeLogs,
-        private readonly LeaveRepository $leaves,
-    ) {
-    }
 
-    public function addTask(int $userId, array $data): void
-    {
-        $date     = Carbon::parse($data['work_date'])->startOfDay();
-        $duration = Duration::parse($data['time']);
+  /**
+   * TimeLogService constructor.
+   *
+   * @param TimeLogRepository $timeLogs
+   * @param LeaveRepository $leaves
+   */
+  public function __construct(
+    private TimeLogRepository $timeLogs,
+    private LeaveRepository $leaves,
+  ) {}
 
-        DB::transaction(function () use ($userId, $date, $duration, $data) {
-            if ($this->leaves->coversDate($userId, $date, lock: true)) {
-                throw ValidationException::withMessages([
-                    'work_date' => 'You have applied leave for this date and cannot log work.',
-                ]);
-            }
+  public function addTask(int $userId, array $data): void
+  {
+    $date     = Carbon::parse($data['work_date'])->startOfDay();
+    $duration = Duration::parse($data['time']);
 
-            $alreadyLogged = $this->timeLogs->minutesLoggedOn($userId, $date, lock: true);
+    DB::transaction(function () use ($userId, $date, $duration, $data) {
+      if ($this->leaves->coversDate($userId, $date, lock: true)) {
+        throw ValidationException::withMessages([
+          'work_date' => 'You have applied leave for this date and cannot log work.',
+        ]);
+      }
 
-            if ($alreadyLogged + $duration->minutes > Duration::MAX_MINUTES) {
-                $remaining = max(0, Duration::MAX_MINUTES - $alreadyLogged);
-                throw ValidationException::withMessages([
-                    'time' => sprintf(
-                        'Daily limit is 10h. Only %02d:%02d left for this date.',
-                        intdiv($remaining, 60),
-                        $remaining % 60,
-                    ),
-                ]);
-            }
+      $alreadyLogged = $this->timeLogs->minutesLoggedOn($userId, $date, lock: true);
 
-            $this->timeLogs->create([
-                'user_id'     => $userId,
-                'project_id'  => $data['project_id'],
-                'work_date'   => $date,
-                'description' => $data['description'],
-                'minutes'     => $duration->minutes,
-            ]);
-        });
-    }
+      if ($alreadyLogged + $duration->minutes > Duration::MAX_MINUTES) {
+        $remaining = max(0, Duration::MAX_MINUTES - $alreadyLogged);
+        throw ValidationException::withMessages([
+          'time' => sprintf(
+            'Daily limit is 10h. Only %02d:%02d left for this date.',
+            intdiv($remaining, 60),
+            $remaining % 60,
+          ),
+        ]);
+      }
+
+      $this->timeLogs->create([
+        'user_id'     => $userId,
+        'project_id'  => $data['project_id'],
+        'work_date'   => $date,
+        'description' => $data['description'],
+        'minutes'     => $duration->minutes,
+      ]);
+    });
+  }
 }

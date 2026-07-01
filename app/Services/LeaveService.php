@@ -11,8 +11,8 @@ use Illuminate\Validation\ValidationException;
 class LeaveService
 {
     public function __construct(
-        private readonly LeaveRepository $leaves,
-        private readonly TimeLogRepository $timeLogs,
+        private LeaveRepository $leaves,
+        private TimeLogRepository $timeLogs,
     ) {
     }
 
