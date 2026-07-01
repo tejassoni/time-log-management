@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TimeLogController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // TimeLog routes
     Route::get('/time-logs', [TimeLogController::class, 'index'])->name('time-logs.index');
     Route::post('/time-logs', [TimeLogController::class, 'store'])->name('time-logs.store');
+
+    // Leave routes
+    Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
+    Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
 });
 
 Route::middleware('auth')->group(function () {

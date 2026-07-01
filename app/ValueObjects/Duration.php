@@ -13,9 +13,8 @@ final class Duration
     }
 
     /**
-     * Accepts: "2:30", "2h30m", "2h 30m", "2h", "30m", "2.5", "2.5h".
-     * A bare whole number is rejected as ambiguous (90 = 90m or 90h?);
-     * use "1:30", "90m", or "1.5h" instead.
+     * Accepts: "2:30", "2h30m", "2h 30m", "2h", "30m", "2.5", "2.5h", "2".
+     * A bare whole number is treated as hours ("2" = 2h = 120 minutes).
      * Returns total minutes.
      */
     public static function parse(string $input): self
@@ -34,9 +33,12 @@ final class Duration
                 => ((int) ($m[1] ?? 0) * 60) + (int) ($m[2] ?? 0),
 
             // Hours as a decimal ("2.5") or explicit "h" suffix ("2.5h", "3h" handled above).
-            // A bare whole number without a unit is intentionally not accepted.
             (bool) preg_match('/^(\d+\.\d+)\s*h?$/', $raw, $m)
                 => (int) round((float) $m[1] * 60),
+
+            // A bare whole number is treated as hours ("2" = 120 minutes).
+            (bool) preg_match('/^(\d{1,2})$/', $raw, $m)
+                => (int) $m[1] * 60,
 
             default => throw new InvalidArgumentException('Invalid time format. Use 2:30, 2h30m, or 2.5h.'),
         };
