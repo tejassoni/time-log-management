@@ -10,12 +10,25 @@ use Illuminate\Validation\ValidationException;
 
 class LeaveService
 {
+    /**
+     * LeaveService constructor.
+     *
+     * @param LeaveRepository $leaves
+     * @param TimeLogRepository $timeLogs
+     */
     public function __construct(
         private LeaveRepository $leaves,
         private TimeLogRepository $timeLogs,
-    ) {
-    }
+    ) {}
 
+    /*
+        * Apply for leave for a user, ensuring no conflicts with existing time logs or leaves.
+        *
+        * @param int $userId The ID of the user applying for leave.
+        * @param array $data An array containing 'start_date' and 'end_date' keys.
+        *
+        * @throws ValidationException If there are conflicts with existing time logs or leaves.
+        */
     public function apply(int $userId, array $data): void
     {
         $start = Carbon::parse($data['start_date'])->startOfDay();

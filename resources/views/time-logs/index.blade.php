@@ -130,9 +130,16 @@
                     </tbody>
                 </table>
 
-                @if ($userTimeLogs->hasPages())
-                    <div class="px-4 py-3 border-t border-gray-200">
-                        {{ $userTimeLogs->links() }}
+                @if ($userTimeLogs->total() > 0)
+                    <div class="px-4 py-3 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <p class="text-sm text-gray-600">
+                            Showing <span class="font-medium">{{ $userTimeLogs->firstItem() }}</span>
+                            to <span class="font-medium">{{ $userTimeLogs->lastItem() }}</span>
+                            of <span class="font-medium">{{ $userTimeLogs->total() }}</span> results
+                        </p>
+                        @if ($userTimeLogs->hasPages())
+                            <div>{{ $userTimeLogs->links() }}</div>
+                        @endif
                     </div>
                 @endif
             </div>

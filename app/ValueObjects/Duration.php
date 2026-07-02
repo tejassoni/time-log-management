@@ -8,7 +8,7 @@ final class Duration
 {
     public const MAX_MINUTES = 600; // 10 hours
 
-    private function __construct(public readonly int $minutes)
+    private function __construct(public int $minutes)
     {
     }
 

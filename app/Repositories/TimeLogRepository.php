@@ -36,7 +36,7 @@ class TimeLogRepository
   /**
    * Paginated, searchable, sortable listing for one day.
    *
-   * @param  array{search?:?string, sort?:?string, direction?:?string, per_page?:?int}  $filters
+   * @param  array $filters
    */
   public function paginatedForDate(int $userId, Carbon $date, array $filters = []): LengthAwarePaginator
   {

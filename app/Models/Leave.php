@@ -9,6 +9,8 @@ class Leave extends Model
 {
     protected $fillable = ['user_id', 'start_date', 'end_date'];
 
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
     protected $casts = [
         'start_date' => 'date',
         'end_date'   => 'date',

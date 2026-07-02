@@ -23,6 +23,14 @@ class TimeLogService
     private LeaveRepository $leaves,
   ) {}
 
+  /**
+   * Add a time log for a user, ensuring no conflicts with existing leaves or daily limits.
+   *
+   * @param int $userId The ID of the user logging work.
+   * @param array $data An array containing 'work_date', 'time', 'project_id', and 'description' keys.
+   *
+   * @throws ValidationException If there are conflicts with existing leaves or daily limits are exceeded.
+   */
   public function addTask(int $userId, array $data): void
   {
     $date     = Carbon::parse($data['work_date'])->startOfDay();

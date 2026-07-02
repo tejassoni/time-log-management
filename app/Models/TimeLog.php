@@ -14,6 +14,12 @@ class TimeLog extends Model
         'description',
     ];
 
+    protected $casts = [
+        'work_date' => 'date',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
     public function project()
     {
         return $this->belongsTo(Project::class);

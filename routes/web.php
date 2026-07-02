@@ -10,16 +10,22 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    
     // TimeLog routes
     Route::get('/time-logs', [TimeLogController::class, 'index'])->name('time-logs.index');
-    Route::post('/time-logs', [TimeLogController::class, 'store'])->name('time-logs.store');
+    Route::post('/time-logs', [TimeLogController::class, 'store'])
+        ->middleware('throttle:30,1')
+        ->name('time-logs.store');
 
     // Leave routes
     Route::get('/leaves', [LeaveController::class, 'index'])->name('leaves.index');
-    Route::post('/leaves', [LeaveController::class, 'store'])->name('leaves.store');
+    Route::post('/leaves', [LeaveController::class, 'store'])
+        ->middleware('throttle:30,1')
+        ->name('leaves.store');
 });
 
 Route::middleware('auth')->group(function () {
